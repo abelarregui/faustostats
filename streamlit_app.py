@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 
-db = r'D:\Proyectos\Proyectos bet\2024\faustostats\faustostats\data\db\table_tennis_stats.csv'
+db = r'https://raw.githubusercontent.com/abelarregui/faustostats/refs/heads/master/faustostats/data/db/table_tennis_stats.csv'
 # Título del dashboard
 st.title("Fausto Stats - Table Tennis")
 
