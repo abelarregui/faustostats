@@ -20,7 +20,6 @@ st.header("Units won")
 cols = st.columns(len(df_agg))
 
 for i, col in enumerate(cols):
-    print(i)
     col.metric(label=df_agg.reset_index().loc[i]['tournament_factor'], value=df_agg.reset_index().loc[i]['cumsum_profit'], 
             delta=df_agg.reset_index().loc[i]['roi'])
 
