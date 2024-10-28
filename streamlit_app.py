@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+from faustostats.utils.kpis import calculate_roi
 
 db = r'https://raw.githubusercontent.com/abelarregui/faustostats/refs/heads/master/faustostats/data/db/table_tennis_stats.csv'
 # db = r'D:\Proyectos\Proyectos bet\2024\faustostats\faustostats\data\db\table_tennis_stats.csv'
@@ -18,28 +19,41 @@ df = df.sort_values(by=['tournament_factor','time'])
 cols_show = ['time','tournament_factor','player_0','player_1','winner', 'profit', 'cumsum_profit','price_home','price_away','stake_home','stake_away','prob_home','prob_away',
              'cb_price_away','cb_price_home','cb_probability_away','cb_probability_home','sc_awayScore.current', 'sc_homeScore.current']
 
-# Obtener el último valor de cumsum_profit por torneo
-latest_cumsum = df.groupby('tournament_factor')['cumsum_profit'].last().reset_index()
-latest_cumsum['cumsum_profit'] = latest_cumsum['cumsum_profit'].round(2)
 
-penultimate_cumsum = df.groupby('tournament_factor')['cumsum_profit'].apply(lambda x: x.iloc[-2] if len(x) > 1 else 0).reset_index()
-penultimate_cumsum.columns = ['tournament_factor', 'penultimate_profit']
-penultimate_cumsum['penultimate_profit'] = penultimate_cumsum['penultimate_profit'].round(2)
+df_agg = calculate_roi(df)
+
+# latest_cumsum = df.groupby('tournament_factor')['cumsum_profit'].last().reset_index()
+
+# # Obtener el último valor de cumsum_profit por torneo
+# latest_cumsum = df.groupby('tournament_factor')['cumsum_profit'].last().reset_index()
+# latest_cumsum['cumsum_profit'] = latest_cumsum['cumsum_profit'].round(2)
+
+# penultimate_cumsum = df.groupby('tournament_factor')['cumsum_profit'].apply(lambda x: x.iloc[-2] if len(x) > 1 else 0).reset_index()
+# penultimate_cumsum.columns = ['tournament_factor', 'penultimate_profit']
+# penultimate_cumsum['penultimate_profit'] = penultimate_cumsum['penultimate_profit'].round(2)
 
 
 # Mostrar KPIs como métricas
 st.header("Units won")
 # Crear columnas
-cols = st.columns(len(latest_cumsum))
+
+cols = st.columns(len(df_agg))
+
+for i, col in enumerate(cols):
+    print(i)
+    col.metric(label=df_agg.reset_index().loc[i]['tournament_factor'], value=df_agg.reset_index().loc[i]['cumsum_profit'], 
+            delta=df_agg.reset_index().loc[i]['roi'])
 
 
-# for index, (col, row) in enumerate(zip(cols, latest_cumsum.itertuples())):
-#     col.metric(label=row.tournament_factor, value=row.cumsum_profit, delta='', 
-#                delta_color="normal")
+# Creamos una lista de columnas de Streamlit, con tantas columnas como filas tenga el DataFrame
+# columns = st.columns(len(df))
 
-for index, (col, latest_row, penultimate_row) in enumerate(zip(cols, latest_cumsum.itertuples(), penultimate_cumsum.itertuples())):
-    delta = latest_row.cumsum_profit - penultimate_row.penultimate_profit  # Calcular delta
-    col.metric(label=latest_row.tournament_factor, value=latest_row.cumsum_profit, delta=round(delta, 2))
+# with columns[0]:
+    
+# Iteramos sobre cada fila y asignamos las métricas a cada columna
+# for idx, row in df_agg.reset_index().iterrows():
+#     with columns[idx]:
+#         st.metric(label=row['tournament_factor'], value=f"Profit: {row['cumsum_profit']}", delta=f"ROI: {row['roi']}")
 
 
 fig = px.line(
