@@ -7,7 +7,7 @@ from faustostats.utils.kpis import calculate_roi, calculate_roi_by_weeks
 db = r'https://raw.githubusercontent.com/abelarregui/faustostats/refs/heads/master/faustostats/data/db/table_tennis_stats.csv'
 # db = r'D:\Proyectos\Proyectos bet\2024\faustostats\faustostats\data\db\table_tennis_stats.csv'
 
-# Configuración de la página
+# Configuración de la página.
 
 st.set_page_config(page_title="Fausto Stats", layout="wide")
 # st.image(r"D:\Proyectos\Proyectos bet\2024\faustostats\logo.jpg", width=50)
