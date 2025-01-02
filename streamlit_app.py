@@ -1,5 +1,5 @@
 import streamlit as st
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 import pandas as pd
 import plotly.express as px
 from faustostats.utils.kpis import calculate_roi, calculate_roi_by_weeks
@@ -14,7 +14,8 @@ st.set_page_config(page_title="Fausto Stats", layout="wide")
 st.subheader('FaustoStats')
 df = pd.read_csv(db)
 df = df.sort_values(by=['tournament_factor','time'], ascending=True)
-df['time'] = pd.to_datetime(df['time'])
+# df['time'] = [datetime.combine(f, datetime.min.time()) if isinstance(f, date) and not isinstance(f, datetime) else f for f in df['time']]
+df['time'] = pd.to_datetime(df['time'], errors='coerce')
 df['year-week'] = df['time'].dt.strftime('%Y-%U')
 df_weeks = calculate_roi_by_weeks(df)
 
