@@ -19,8 +19,7 @@ df['time'] = pd.to_datetime(df['time'], errors='coerce')
 df['year-week'] = df['time'].dt.strftime('%Y-%U')
 df_weeks = calculate_roi_by_weeks(df)
 
-cols_show = ['time','tournament_factor','player_0','player_1','winner', 'profit', 'cumsum_profit','price_home','price_away','stake_home','stake_away','prob_home','prob_away',
-             'cb_price_away','cb_price_home','cb_probability_away','cb_probability_home','sc_awayScore.current', 'sc_homeScore.current']
+cols_show = ['time','tournament_factor','player_0','player_1','winner', 'profit', 'cumsum_profit','price_home','price_away','stake_home','stake_away','prob_home','prob_away']
 
 days_7_ago = (datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d")
 days_30_ago = (datetime.now() - timedelta(days=30)).strftime("%Y-%m-%d")
@@ -40,19 +39,19 @@ with tab_summary:
     'Last 7 days'
     cols = st.columns(len(df_agg_last7))
     for i, col in enumerate(cols):
-        col.metric(label=df_agg_last7.reset_index().loc[i]['tournament_factor'], value=df_agg_last7.reset_index().loc[i]['cumsum_profit'], 
+        col.metric(label=df_agg_last7.reset_index().loc[i]['tournament_factor'], value=df_agg_last7.reset_index().loc[i]['cumsum_profit'],
                 delta=df_agg_last7.reset_index().loc[i]['roi'])
     "---"
     'Last 30 days'
     cols = st.columns(len(df_agg_last30))
     for i, col in enumerate(cols):
-        col.metric(label=df_agg_last30.reset_index().loc[i]['tournament_factor'], value=df_agg_last30.reset_index().loc[i]['cumsum_profit'], 
+        col.metric(label=df_agg_last30.reset_index().loc[i]['tournament_factor'], value=df_agg_last30.reset_index().loc[i]['cumsum_profit'],
                 delta=df_agg_last30.reset_index().loc[i]['roi'])
     "---"
     'All'
     cols = st.columns(len(df_agg))
     for i, col in enumerate(cols):
-        col.metric(label=df_agg.reset_index().loc[i]['tournament_factor'], value=df_agg.reset_index().loc[i]['cumsum_profit'], 
+        col.metric(label=df_agg.reset_index().loc[i]['tournament_factor'], value=df_agg.reset_index().loc[i]['cumsum_profit'],
                 delta=df_agg.reset_index().loc[i]['roi'])
     "---"
 
@@ -102,7 +101,7 @@ with tab_weeks:
     df_weeks
 
 with tab_max:
-    
+
     fig = px.line(
         df,
         x='time',
@@ -128,7 +127,7 @@ with tab_max:
         if row['profit'] > 0:
             return ['background-color: lightgreen' for _ in row]
         elif row['profit'] < 0:
-            return ['background-color: lightcoral' for _ in row] 
+            return ['background-color: lightcoral' for _ in row]
         else:
             return ['' for _ in row]
 
