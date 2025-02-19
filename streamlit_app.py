@@ -19,7 +19,7 @@ df['time'] = pd.to_datetime(df['time'], errors='coerce')
 df['year-week'] = df['time'].dt.strftime('%Y-%U')
 df_weeks = calculate_roi_by_weeks(df)
 
-cols_show = ['time','tournament_factor','player_0','player_1','winner', 'profit', 'cumsum_profit','price_home','price_away','stake_home','stake_away','prob_home','prob_away']
+cols_show = ['time','tournament_factor','home.name','away.name','winner', 'profit', 'cumsum_profit','price_home','price_away','stake_home','stake_away','prob_home','prob_away']
 
 days_7_ago = (datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d")
 days_30_ago = (datetime.now() - timedelta(days=30)).strftime("%Y-%m-%d")
