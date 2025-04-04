@@ -3,7 +3,7 @@ from datetime import datetime, timedelta, date
 import pandas as pd
 import plotly.express as px
 from faustostats.utils.kpis import calculate_roi, calculate_roi_by_weeks
-
+from faustostats.utils.payment import calc_payment_table
 db = r'https://raw.githubusercontent.com/abelarregui/faustostats/refs/heads/master/faustostats/data/db/table_tennis_stats.csv'
 # db = r'D:\Proyectos\Proyectos bet\2024\faustostats\faustostats\data\db\table_tennis_stats.csv'
 
@@ -18,6 +18,10 @@ df = df.sort_values(by=['tournament_factor','time'], ascending=True)
 df['time'] = pd.to_datetime(df['time'], errors='coerce')
 df['year-week'] = df['time'].dt.strftime('%Y-%U')
 df_weeks = calculate_roi_by_weeks(df)
+df['time'] = pd.to_datetime(df['time'], errors='coerce')
+df['year-week'] = df['time'].dt.strftime('%Y-%U')
+df_weeks = calculate_roi_by_weeks(df)
+df_pay = calc_payment_table(df_weeks)
 
 cols_show = ['time','tournament_factor','home.name','away.name','winner', 'profit', 'cumsum_profit','price_home','price_away','stake_home','stake_away','prob_home','prob_away']
 
@@ -99,6 +103,8 @@ with tab_weeks:
     st.plotly_chart(fig)
     'Weeks'
     df_weeks
+    'Payment'
+    df_pay
 
 with tab_max:
 
